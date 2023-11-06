@@ -1,10 +1,7 @@
-from rest_framework import viewsets, status
+from rest_framework import status
 from django.shortcuts import get_object_or_404
-from .models import News, Comment
-from .serializers import NewsSerializer, CommentSerializer, NewsWithCommentsSerializer
-
-
-
+from .models import News
+from .serializers import NewsSerializer, NewsWithCommentsSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -16,7 +13,7 @@ utc=pytz.UTC
 
 @api_view(('GET',))
 def news_list(request):
-    news = News.objects.all()
+    news = News.objects.all().exclude(deleted=True).exclude(date__gt=dt.datetime.now())
     serializer = NewsSerializer(news, many=True)
     return Response({'news': serializer.data, 'news_count': news.count()})
 
@@ -25,7 +22,6 @@ def news_list(request):
 def news_id(request, news_id):
     news = get_object_or_404(News, id=news_id)
     time = utc.localize(dt.datetime.now())
-    
     if news.deleted or news.date > time:
         return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = NewsWithCommentsSerializer(news, context={'request': request})
