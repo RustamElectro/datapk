@@ -30,13 +30,3 @@ def news_id(request, news_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = NewsWithCommentsSerializer(news, context={'request': request})
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# class NewsViewSet(viewsets.ModelViewSet):
-#     queryset = News.objects.all()
-#     serializer_class = NewsSerializer
-
-
-# class CommentViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
