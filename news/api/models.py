@@ -10,6 +10,10 @@ class News(models.Model):
     body = models.TextField()
     deleted = models.BooleanField()
 
+    class Meta:
+        ordering = ('date',)
+        verbose_name_plural = 'Новости'
+
     def __str__(self):
         return self.body[:15]
 
@@ -19,6 +23,10 @@ class Comment(models.Model):
     title = models.CharField('Заголовок', max_length=500)
     date = models.DateTimeField('Дата комментария', auto_now_add=True)
     comment = models.TextField()
+
+    class Meta:
+        ordering = ('date',)
+        verbose_name_plural = 'Комментарии'
 
     def __str__(self):
         return self.title[:15]
